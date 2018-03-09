@@ -23,3 +23,10 @@ td {
   float: left
   padding: 15px;
 }
+
+#annualSalaryTotalDisplay {
+  float: right;
+  height: 15px;
+  width: 100px;
+
+}
