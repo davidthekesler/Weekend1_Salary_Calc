@@ -1,0 +1,25 @@
+table {
+  width: 100%;
+
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 15px;
+}
+
+th, td {
+    text-align: left;
+}
+
+td {
+  background-color: #f1f1f1;
+}
+
+.formInput {
+  float: left
+  padding: 15px;
+}
