@@ -1,3 +1,19 @@
+#annualSalaryTotalDisplay {
+  float: right;
+  height: 15px;
+  width: 100px;
+}
+
+.formInput {
+  float: left
+  padding: 15px;
+}
+
+h1 {
+    background-color: #5e7aa8;
+    border: 1px solid black;
+}
+
 table {
   width: 100%;
 
@@ -19,14 +35,17 @@ td {
   background-color: #f1f1f1;
 }
 
-.formInput {
-  float: left
-  padding: 15px;
+#submitFormIntro {
+background-color: #f1f1f1;
+width: 100px;
+margin-bottom: 15px;
+
 }
 
-#annualSalaryTotalDisplay {
-  float: right;
-  height: 15px;
-  width: 100px;
+#employeeTableIntro {
+background-color: #f1f1f1;
+width: 100px;
+margin-top: 15px;
+margin-bottom: 15px;
 
 }
