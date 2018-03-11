@@ -3,12 +3,13 @@ console.log('js');
 let annualSalaryTotal = 0;
 
 class Employee {
-  constructor(firstNameIn, lastNameIn, idNumberIn, jobTitleIn, annualSalaryIn) {
+  constructor(firstNameIn, lastNameIn, idNumberIn, jobTitleIn, annualSalaryIn, deleteButtonIn) {
     this.firstName = firstNameIn;
     this.lastName = lastNameIn;
     this.idNumber = idNumberIn;
     this.jobTitle = jobTitleIn;
     this.annualSalary = annualSalaryIn;
+    this.deleteButton = deleteButtonIn;
   }
 }
 
@@ -20,6 +21,7 @@ function readyNow () {
 
   //firstName, lastName, idNumber, jobTitle, annualSalary
   $('#submitButton').on('click', submitButtonOnClick);
+  $('#employeeTable').on('click', '.deleteEmployeeButton', deleteEmployeeButtonOnClick);
   }//end readyNow
 
 
@@ -36,20 +38,37 @@ function submitButtonOnClick() {
     $('#jobTitleInput').val('');
     employeeEntered.annualSalary = parseInt($('#annualSalaryInput').val());
     $('#annualSalaryInput').val('');
+    employeeEntered.deleteButton = '<button class="deleteEmployeeButton" value="'
+                                    + employeeEntered.annualSalary + '">Delete</button>';
+
     employeeArray.push(employeeEntered);
+
     $('#employeeTable').append('<tr><td>' + employeeEntered.firstName +
                                '</td><td>' + employeeEntered.lastName +
                                '</td><td>' + employeeEntered.idNumber +
                                '</td><td>' + employeeEntered.jobTitle +
                                '</td><td>' + employeeEntered.annualSalary +
-                               '</td>');
+                               '</td><td>' + employeeEntered.deleteButton +
+                               '</td></tr>');
     annualSalaryTotal += employeeEntered.annualSalary;
     $('#annualSalaryTotalDisplay').empty();
-    $('#annualSalaryTotalDisplay').append('Total Monthly: $' + annualSalaryTotal);
+    $('#annualSalaryTotalDisplay').append('Total Monthly: $' + (annualSalaryTotal/12).toFixed(2));
     if ((annualSalaryTotal/12) > 20000) {
       console.log('monthly total over 20000');
       $('#annualSalaryTotalDisplay').css("background-color", "red");
     }//end annualSalaryTotal if
     console.log(annualSalaryTotal);
-
 }//end submitButtonOnClick
+
+function deleteEmployeeButtonOnClick () {
+    console.log('button value this:', $(this));
+    $(this).closest('tr').remove();
+    let salarySubtract = Number($(this).val());
+    annualSalaryTotal -= salarySubtract;
+    $('#annualSalaryTotalDisplay').empty();
+    $('#annualSalaryTotalDisplay').append('Total Monthly: $' + (annualSalaryTotal/12).toFixed(2));
+    if ((annualSalaryTotal/12) <= 20000) {
+      console.log('monthly total under 20000');
+      $('#annualSalaryTotalDisplay').css("background-color", "white");
+    }//end annualSalaryTotal if
+}
