@@ -3,12 +3,13 @@ console.log('js');
 let annualSalaryTotal = 0;
 
 class Employee {
-  constructor(firstNameIn, lastNameIn, idNumberIn, jobTitleIn, annualSalaryIn, deleteButtonIn) {
+  constructor(firstNameIn, lastNameIn, idNumberIn, jobTitleIn, annualSalaryIn, empGUIDIn, deleteButtonIn) {
     this.firstName = firstNameIn;
     this.lastName = lastNameIn;
     this.idNumber = idNumberIn;
     this.jobTitle = jobTitleIn;
     this.annualSalary = annualSalaryIn;
+    this.empGUID = empGUIDIn;
     this.deleteButton = deleteButtonIn;
   }
 }
@@ -17,14 +18,13 @@ employeeArray = [];
 
 $(document).ready(readyNow);  //wait for doc to be ready before loading readyNow
 
+//initiates event handlers
 function readyNow () {
-
-  //firstName, lastName, idNumber, jobTitle, annualSalary
   $('#submitButton').on('click', submitButtonOnClick);
   $('#employeeTable').on('click', '.deleteEmployeeButton', deleteEmployeeButtonOnClick);
   }//end readyNow
 
-
+//sends new employee to employeeArray and adds employee to table
 function submitButtonOnClick() {
     console.log('in submitButtonOnClick');
     employeeEntered = new Employee;
@@ -38,8 +38,10 @@ function submitButtonOnClick() {
     $('#jobTitleInput').val('');
     employeeEntered.annualSalary = parseInt($('#annualSalaryInput').val());
     $('#annualSalaryInput').val('');
+    let newGUID = generateGUID();
+    employeeEntered.empGUID = newGUID;
     employeeEntered.deleteButton = '<button class="deleteEmployeeButton" value="'
-                                    + employeeEntered.annualSalary + '">Delete</button>';
+                                    + newGUID + '">Delete</button>';
 
     employeeArray.push(employeeEntered);
 
@@ -50,25 +52,60 @@ function submitButtonOnClick() {
                                '</td><td>' + employeeEntered.annualSalary +
                                '</td><td>' + employeeEntered.deleteButton +
                                '</td></tr>');
-    annualSalaryTotal += employeeEntered.annualSalary;
+    updateAnnualSalaryTotal ();
     $('#annualSalaryTotalDisplay').empty();
     $('#annualSalaryTotalDisplay').append('Total Monthly: $' + (annualSalaryTotal/12).toFixed(2));
     if ((annualSalaryTotal/12) > 20000) {
       console.log('monthly total over 20000');
       $('#annualSalaryTotalDisplay').css("background-color", "red");
     }//end annualSalaryTotal if
-    console.log(annualSalaryTotal);
 }//end submitButtonOnClick
 
+//removes employee from table, and calls deleteEmployeeFromEmployeeArray
 function deleteEmployeeButtonOnClick () {
-    console.log('button value this:', $(this));
+    let empGUIDIn = $(this).val();
+    deleteEmployeeFromEmployeeArray (empGUIDIn);
+    // console.log(employeeArray);
     $(this).closest('tr').remove();
-    let salarySubtract = Number($(this).val());
-    annualSalaryTotal -= salarySubtract;
+    updateAnnualSalaryTotal();
     $('#annualSalaryTotalDisplay').empty();
     $('#annualSalaryTotalDisplay').append('Total Monthly: $' + (annualSalaryTotal/12).toFixed(2));
     if ((annualSalaryTotal/12) <= 20000) {
-      console.log('monthly total under 20000');
       $('#annualSalaryTotalDisplay').css("background-color", "white");
     }//end annualSalaryTotal if
-}
+}//end deleteEmployeeButtonOnClick
+
+//generates GUID - haven't made this protect against duplicate entries yet, but it's unlikely.
+function generateGUID () {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  let guidToReturn = s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  return guidToReturn;
+}//end generateGUID
+
+function updateAnnualSalaryTotal () {
+  annualSalaryTotal = 0;
+  for (let emp of employeeArray) {
+    annualSalaryTotal += emp.annualSalary;
+  }
+}//end updateAnnualSalary
+
+function deleteEmployeeFromEmployeeArray (empGUIDIn) {
+  if (employeeArray.length === 1 ){
+    employeeArray = [];
+  }//end employeeArray.length if
+  else {
+    for (i = 0; i < employeeArray.length; i++) {
+    if (employeeArray[i].empGUID === empGUIDIn) {
+      console.log('empGUIDIn: ' + empGUIDIn);
+      console.log('found a match, employeeArray[i].empGUID: ' + employeeArray[i].empGUID);
+      employeeArray.splice(i, 1);
+    }//end if employeeArray.splice
+    }//end for
+  }//end else
+  updateAnnualSalaryTotal();
+  console.log(annualSalaryTotal);
+}//end deleteEmployeeFromEmployeeArray

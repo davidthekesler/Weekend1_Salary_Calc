@@ -53,16 +53,24 @@ th, td {
 }
 
 #submitFormIntro {
-background-color: #f1f1f1;
-width: 105px;
-margin-bottom: 15px;
+  background-color: #f1f1f1;
+  width: 105px;
+  margin-bottom: 15px;
 
 }
 
+#submitFormIntroAndPrompt {
+  float: left;
+}
+
+#submitForm {
+  float: left
+}
+
 #employeeTableIntro {
-background-color: #f1f1f1;
-width: 105px;
-margin-top: 15px;
-margin-bottom: 15px;
+  background-color: #f1f1f1;
+  width: 105px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 
 }
